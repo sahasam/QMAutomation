@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>QM Checkin Form</title>
+</head>
+<body>
+    <div id="form">
+    <form action="processcheckout.php" method="get">
+        Type of Gear:
+        <select name="gear-type" id="selectType">
+                <option value="choose-an-option">Choose an Option</option>
+                <option value="tent">Tent</option>
+                <option value="chef-kit">Chef Kit</option>
+                <option value="cook-kit">Cook Kit</option>
+        </select>
+        <br><br>
+        ID: <input type="text" name="id-number">
+        <br><br>
+        Comments: <br><textarea name="comments" id="comments-input" cols="30" rows="3"></textarea> <br><br>
+        
+        <legend>Quality: (use your best judgement)</legend>
+        <select name="quality" id="select-quality">
+            <option value="choose-an-option">Choose an Option</option>
+            <option value="like-new">Like New</option>
+            <option value="good">Good</option>
+            <option value="fair">Fair</option>
+            <option value="bad">Bad</option>
+            <option value="unusable">Unusable</option>
+        </select> <br><br>
+        
+        <fieldset class="date"> 
+      <legend>Checkin Date</legend> 
+      <label for="month_start">Month</label> 
+      <select id="month_start" 
+              name="month_start" /> 
+        <option>January</option>       
+        <option>February</option>       
+        <option>March</option>       
+        <option>April</option>       
+        <option>May</option>       
+        <option>June</option>       
+        <option>July</option>       
+        <option>August</option>       
+        <option>September</option>       
+        <option>October</option>       
+        <option>November</option>       
+        <option>December</option>       
+      </select> - 
+      <label for="day_start">Day</label> 
+      <select id="day_start" 
+              name="day_start" /> 
+        <option>1</option>       
+        <option>2</option>       
+        <option>3</option>       
+        <option>4</option>       
+        <option>5</option>       
+        <option>6</option>       
+        <option>7</option>       
+        <option>8</option>       
+        <option>9</option>       
+        <option>10</option>       
+        <option>11</option>       
+        <option>12</option>       
+        <option>13</option>       
+        <option>14</option>       
+        <option>15</option>       
+        <option>16</option>       
+        <option>17</option>       
+        <option>18</option>       
+        <option>19</option>       
+        <option>20</option>       
+        <option>21</option>       
+        <option>22</option>       
+        <option>23</option>       
+        <option>24</option>       
+        <option>25</option>       
+        <option>26</option>       
+        <option>27</option>       
+        <option>28</option>       
+        <option>29</option>       
+        <option>30</option>       
+        <option>31</option>       
+      </select> -
+      <label for="year_start">Year</label> 
+      <select id="year_start" 
+             name="year_start" /> 
+        <option value="2017">2017</option>            
+        <option value="2018">2018</option>
+        <option value="2019">2019</option>
+        <option value="2020">2020</option>
+        <option value="2021">2021</option>       
+      </select> 
+      <span class="inst">(Month-Day-Year)</span> 
+    </fieldset> <br><br>
+    <input type="submit" value="Submit">    
+    </form>
+</body>
+</html>
