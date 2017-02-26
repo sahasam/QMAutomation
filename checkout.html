@@ -6,91 +6,125 @@
     <link rel="stylesheet" type="text/css" href="stylesheet.css">
 </head>
 <body>
-<!--<ul id="navbar">
-    <li id="navbar-list1" class="navbar-element"><a href="#">Login</a></li>
-    <li id="navbar-list2" class="navbar-element"><a href="#">Sign Up</a></li>
-    <li id="navbar-list3" class="navbar-element"><a href="#">Sheets</a></li>
-</ul> -->    
+<ul id="navbar">
+    <li id="navbar-list1" class="navbar-element"><a href="checkin.html">New Gear</a></li>
+    <li id="navbar-list2" class="navbar-element"><a href="#">Check out</a></li>
+    <li id="navbar-list3" class="navbar-element"><a href="#">Check in</a></li>
+</ul>    
 <div id="form">
     <form action="Checkout">
-        Type of Gear:
-        <select name="gear-type" id="selectType">
-                <option value="choose-an-option">Choose an Option</option>
-                <option value="tent">Tent</option>
-                <option value="chef-kit">Chef Kit</option>
-                <option value="cook-kit">Cook Kit</option>
-        </select>
+           Recipient <input type="text" id="input-person">
+          <div id="gear">
+           <!-- Type of Gear Input-->
+            Type of Gear:
+            <select name="gear-type" id="input-gearType">
+                    <option value="choose-an-option">Choose an Option</option>
+                    <option value="tent">Tent</option>
+                    <option value="chef-kit">Chef Kit</option>
+                    <option value="cook-kit">Cook Kit</option>
+            </select>
+        </div>
         <br><br>
-        ID: <input type="text" name="id-number">
-        <br><br>
-        Reason: <input type="text"> <br><br>
         
-        <fieldset class="date"> 
-      <legend>Checkout Date</legend> 
-      <label for="month_start">Month</label> 
-      <select id="month_start" 
-              name="month_start" /> 
-        <option>January</option>       
-        <option>February</option>       
-        <option>March</option>       
-        <option>April</option>       
-        <option>May</option>       
-        <option>June</option>       
-        <option>July</option>       
-        <option>August</option>       
-        <option>September</option>       
-        <option>October</option>       
-        <option>November</option>       
-        <option>December</option>       
-      </select> - 
-      <label for="day_start">Day</label> 
-      <select id="day_start" 
-              name="day_start" /> 
-        <option>1</option>       
-        <option>2</option>       
-        <option>3</option>       
-        <option>4</option>       
-        <option>5</option>       
-        <option>6</option>       
-        <option>7</option>       
-        <option>8</option>       
-        <option>9</option>       
-        <option>10</option>       
-        <option>11</option>       
-        <option>12</option>       
-        <option>13</option>       
-        <option>14</option>       
-        <option>15</option>       
-        <option>16</option>       
-        <option>17</option>       
-        <option>18</option>       
-        <option>19</option>       
-        <option>20</option>       
-        <option>21</option>       
-        <option>22</option>       
-        <option>23</option>       
-        <option>24</option>       
-        <option>25</option>       
-        <option>26</option>       
-        <option>27</option>       
-        <option>28</option>       
-        <option>29</option>       
-        <option>30</option>       
-        <option>31</option>       
-      </select> -
-      <label for="year_start">Year</label> 
-      <select id="year_start" 
-             name="year_start" /> 
-        <option value="2017">2017</option>            
-        <option value="2018">2018</option>
-        <option value="2019">2019</option>
-        <option value="2020">2020</option>
-        <option value="2021">2021</option>       
-      </select> 
-      <span class="inst">(Month-Day-Year)</span> 
-    </fieldset> <br><br>
-    <input type="submit" value="Submit">    
+        <!-- Gear Id Identifier Input-->
+        <div id="idNumber">
+            Gear Identifier: <input type="text" id="input-idNumber">
+        </div>
+        <br>
+        
+        <div id="findReason">
+            Reason: <input type="text" id="input-reason"> <br><br>
+        </div>
+        
+        <input id="checkout" type="button" value="Check out">    
     </form>
+    
+    <div id="jsonTest"></div>
+    
+    
 </div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.1.1.js"></script>
+    
+    <script type = "text/javascript">
+        var pubkey = "pub-c-c2d65144-cdff-4686-b439-805c13176afc";
+        var subkey = "sub-c-8e99e904-fb29-11e6-9c1a-0619f8945a4f";
+        
+        var todayDate = new Date();
+        var dateString = todayDate.getFullYear() + '-' + (todayDate.getDate() + 1) + '-' + todayDate.getMonth();
+        
+        
+        $( "#checkout" ).on( "click", function() {
+            var gearType = $("#input-gearType option:selected").text();
+            var gearID = $("#input-idNumber").val();
+            var reason = $("#input-reason").val();
+            var owner = $("#input-person").val();
+            var id = guid();
+            
+            //create the checkin json object
+            var record = {
+                "id": id,
+                "gearType": gearType,
+                "gearID": gearID,
+                "date": dateString,
+                "reason": reason,
+                "owner": owner
+            };
+            
+            publish(record);
+            console.log(record);
+    });
+        
+    var  publish = function(record){
+    // Publish a simple message to the demo_tutorial channel
+        var message = {
+            "command": "checkout",
+            "record": record
+        };
+        
+        pubnubDemo.publish({
+            message: message,
+            channel: 'database-channel'
+        }); 
+    }
+    
+    function guid() {
+        //crate a random number within the parameters
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+        }   
+        
+        //create the final uuid
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
+    }
+    
+        var pubnubDemo = new PubNub({
+        publishKey:pubkey,
+        subscribeKey: subkey
+    });
+
+    // Subscribe to the demo_tutorial channel
+    pubnubDemo.addListener({
+        message: function(message){
+        console.log(message);
+        var record = message.message.record;
+
+        var recordString = "<p> " + record.name + "</p>";
+        $("#jsonTest").html(recordString);
+    }
+})
+
+pubnubDemo.subscribe({
+    channels: ['database_channel']
+});
+
+        
+        
+    </script>
+    
+    
 </body>
 </html>
