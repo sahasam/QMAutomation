@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>QM Checkin Form</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.1.1.js"></script>
+
 </head>
 <body>
 <div id="navbar-div">
@@ -13,6 +19,8 @@
     </ul>  
 </div>
 
+div#
+    
 <form id="checkInInput" action = "Checkin">
      
      <fieldset>
@@ -42,21 +50,42 @@
      
      Comments <br> <textarea id="input-comments" rows="3" cols="50"></textarea>
      
-     <br><br><input type="button" value="submit" id="sumbit">
+     <br><br><input type="button" value="submit" id="checkinButton">
      
 </form>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.1.1.js"></script>
+<div id="jsonTest">Results</div>
+
 <script type = "text/javascript">
     var pubkey = "pub-c-c2d65144-cdff-4686-b439-805c13176afc";
     var subkey = "sub-c-8e99e904-fb29-11e6-9c1a-0619f8945a4f";
+    
+    var pubnubDemo = new PubNub({
+        publishKey:pubkey,
+        subscribeKey: subkey
+    });
+ 
+    
+    // Subscribe to the demo_tutorial channel
+pubnubDemo.addListener({
+    message: function(message){
+        console.log("Listening to ", message)
+         $("#jsonTest").html(JSON.stringify(message));
+    }
+})
+
+pubnubDemo.subscribe({
+    channels:  ['database_channel', 'gearList-channel']
+});
+    
+    
+    
 
     var todayDate = new Date();
     var dateString = todayDate.getFullYear() + '-' + (todayDate.getDate() + 1) + '-' + todayDate.getMonth();
 
 
-    $( "#sumbit" ).on( "click", function() {
+    $( "#checkinButton" ).on( "click", function() {
         var gearType = $("#input-gearType option:selected").text();
         var gearID = $("#input-gearID").val();
         var quality = $("input[name='quality']:checked").val();
@@ -64,6 +93,7 @@
         var owner = $("#recipient").val();
         var id = guid();
 
+        
         //create the checkin json object
         var record = {
             "id": id,
@@ -74,15 +104,16 @@
             "comments": comments,
             "owner": owner
         };
+        
         console.log(record);
-
-        publish(record);
+        publish(record,"save");
     });
         
-    var  publish = function(record){
+    var  publish = function(record,command){
     // Publish a simple message to the demo_tutorial channel
         var message = {
-            "command": "checkin",
+            "command": command,
+            "datastore": "gear",
             "record": record
         };
         
@@ -103,26 +134,8 @@
         s4() + '-' + s4() + s4() + s4();
     }
     
-    var pubnubDemo = new PubNub({
-        publishKey:pubkey,
-        subscribeKey: subkey
-    });
-
-    // Subscribe to the demo_tutorial channel
-    pubnubDemo.addListener({
-        message: function(message){
-            console.log(message);
-            var record = message.message.record;
-
-            var recordString = "<p> " + record.name + "</p>";
-            $("#jsonTest").html(recordString);
-            }
-    })
-
-    pubnubDemo.subscribe({
-        channels: ['database_channel']
-    });
-
+ 
+    
         
         
 </script>
