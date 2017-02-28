@@ -13,3 +13,8 @@
 #pagetabs {
    color: #fff;
 }
+
+.displayListItem span{
+    float: right;
+    margin-left: 50%;
+}

@@ -93,7 +93,7 @@ $( "#button-a-person" ).on("click", function() {
     console.log(record);
     publish(record,"save","user");
 
- 
+    $("#form-a-person").trigger("reset");
 });
 
 $( "#button-a-gear" ).on("click", function() {
@@ -115,26 +115,30 @@ $( "#button-a-gear" ).on("click", function() {
         "condition": quality,
         "status": 0,
         "owner": {
-            "id": ""
+            "id": "",
+            "name":""
         }
     };
 
     console.log(record);
     publish(record,"save","gear");
+    
+    $("#form-a-gear").trigger("reset");
 });
-    var  publish = function(record,command,datastore){
-    // Publish a simple message to the demo_tutorial channel
-        var message = {
-            "command": command,
-            "datastore": datastore,
-            "record": record
-        };
 
-        pubnub.publish({
-            message: message,
-            channel: 'database-channel'
-        }); 
-    }
+var  publish = function(record,command,datastore){
+// Publish a simple message to the demo_tutorial channel
+    var message = {
+        "command": command,
+        "datastore": datastore,
+        "record": record
+    };
+
+    pubnub.publish({
+        message: message,
+        channel: 'database-channel'
+    }); 
+}
 
 $("#searchbutton").on("click",function() {
     var searchValue = $("#searchbar").val();
@@ -154,45 +158,46 @@ $("#searchbutton").on("click",function() {
 // Utility functions for bootstrap
 function createList(data) {
     var items = data;
-    var startTag = "<ul class='list-group'>";
-    var endTag = "</ul>";
-    
     var listItems = [];
     var outItems = [];
     
+    var inShackRowEntry = 0;
+    var outShackRowEntry = 0;
     items.forEach((item) => {
       if (item.status == 0) {
-          var item1 = makeListItem(item);
+          var item1 = makeListItem(item,inShackRowEntry);
+          inShackRowEntry += 1;
           listItems.push(item1);
       }  
       else {
-          var item1 = makeListItem(item);
+          var item1 = makeListItem(item,outShackRowEntry);
+          outShackRowEntry += 1;
           outItems.push(item1);
       }
     });
     
-    //for(var i = ;i<items.length - 1;i--) {
-    //    var item = makeListItem(items[i]);
-    //    listItems.push(item);
-    //};
-    
-    
-    console.log("This is the listItems" + listItems);
-    
-    var html = startTag + listItems.join("") + endTag;
-    var html1 = startTag + outItems.join("") + endTag;
+    var html = listItems.join("");
+    var html1 = outItems.join("");
     
     
     
-    $("#inshack-list").html(html);
-    $('#outshack-list').html(html1);
+    $("#insideShack-gearTable").html(html);
+    $('#outsideShack-gearTable').html(html1);
 
 }
 
 // make a list item out of a gear object (id + gearType)
-function makeListItem(item){
+function makeListItem(item,rowEntry){
     //var html = "<li id=''>" + item.label + "</li>";
-    var html = '<li class="list-group-item" id="'+item.id+'">'+item.id+ ' \t' + item.name + ' '+ '</li>';
+    //var html = '<li class="list-group-item displayListItem" id="'+item.id+'">'+item.name+ ' ' + '<span>'+item.id+'</span>' + ' '+ '</li>';
+    var html = '<tr><td>'+(rowEntry+1)+'</td><td>'+item.id+'</td><td>'+item.name+'</td>';
+    
+    //Add the name of the owner if the 
+    if(item.status == 1) {
+        html += '<td>'+item.owner.name+'</td>';
+    }
+    html+='</tr>';
+    console.log(html);
     return html
 }
 
