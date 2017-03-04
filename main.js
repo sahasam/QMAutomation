@@ -34,6 +34,11 @@ function init() {
                 var data = Object.message.list
                 displayMessage(data);
             }
+            else if(Object.channel == "userList-channel") {
+                if(Object.message.from == "searchButton") {
+                    listUserGear(Object.message);
+                }
+            }
         }
     })
     pubnub.subscribe({
@@ -141,17 +146,15 @@ var  publish = function(record,command,datastore){
 }
 
 $("#searchbutton").on("click",function() {
-    var searchValue = $("#searchbar").val();
-    
-    var message = {
-        "command":"findGear",
-        "name" : searchValue
-    }
-    
-    pubnub.publish({
-        message: message,
-        channel: "database-channel"
-    });
+        var message = {
+            "command":"listUsers",
+            "from" : "searchButton"
+        }
+
+        pubnub.publish({
+            message: message,
+            channel: "database-channel"
+        });
 });
 
 
@@ -201,6 +204,47 @@ function makeListItem(item,rowEntry){
     return html
 }
 
-
-
-
+function listUserGear(message) {
+    var target = $("#search-results");
+    
+    var searchName = $('#select-to').val();
+    //if(searchName != ""){
+        var html = "<h1>"+searchName+"</h1>";
+        
+        var foundMatch = false;
+        var person;
+       for(var i = 0;i<message.list.length;i++){
+           console.log(i);
+            if(message.list[i].name == searchName) {
+                foundMatch = true;
+                person = message.list[i];
+                break;
+            }
+       }
+        /*
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Row</th>
+                                    <th>Gear Id</th>
+                                    <th>Gear Type</th>
+                                </tr>
+                            </thead>
+                            <tbody id="insideShack-gearTable">
+                            </tbody>
+                        </table>        
+         */
+        if(foundMatch) {
+            html += "<br>";
+            html += '<table class="table"><thead><tr><th>Row</th><th>Gear Id</th><th>Gear Type</th></tr></thead><tbody id="insideShack-gearTable">';
+            //Make List Items
+            html += '</tbody></table>';
+        }
+        else {
+            html += "<br><h1>NO MATCH</h1>";
+        }
+    //}
+    
+    target.html(html);
+    
+}
