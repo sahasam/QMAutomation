@@ -17,6 +17,7 @@ $('#pagetabs a').click(function (e) {
 window.onload = function(){
     init();
 }
+
 function init() {
     pubnub = new PubNub({
         publishKey:pubkey,
@@ -209,7 +210,7 @@ function listUserGear(message) {
     
     var searchName = $('#select-to').val();
     //if(searchName != ""){
-        var html = "<h1>"+searchName+"</h1>";
+        var html = "<h1>"+searchName+'</h1><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#checkout-modal">Checkout</button>';
         
         var foundMatch = false;
         var person;
@@ -236,7 +237,7 @@ function listUserGear(message) {
          */
         if(foundMatch) {
             html += "<br>";
-            html += '<table class="table"><thead><tr><th>Row</th><th>Gear Id</th><th>Gear Type</th></tr></thead><tbody id="insideShack-gearTable">';
+            html += '<table class="table"><thead><tr><th>Row</th><th>Gear Id</th><th>Gear Type</th></tr></thead><tbody id="userList-gearTable">';
             //Make List Items
             html += '</tbody></table>';
         }
