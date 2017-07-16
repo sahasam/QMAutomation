@@ -7,7 +7,7 @@ exports.list = function(req, res){
 
   req.getConnection(function(err,connection){
 
-        var query = connection.query('SELECT * FROM QM_GEAR_1',function(err,rows)
+        var query = connection.query('SELECT * FROM QM_GEAR',function(err,rows)
         {
 
             if(err)
@@ -33,7 +33,7 @@ exports.edit = function(req, res){
 
     req.getConnection(function(err,connection){
 
-        var query = connection.query('SELECT * FROM QM_GEAR_1 WHERE id = ?',[id],function(err,rows)
+        var query = connection.query('SELECT * FROM QM_GEAR WHERE id = ?',[id],function(err,rows)
         {
 
             if(err)
@@ -59,13 +59,15 @@ exports.save = function(req,res){
 
             ID    : input.id,
             NOTES : input.notes,
-            ITEM_CONDITION   : input.itme_condition,
             ITEM_STATUS   : input.item_status,
-            LAST_USER     : input.last_user
+            ITEM_RATING   : input.item_rating,
+            CREATED_DATE  : new Date(Date.now()).toLocaleString(),
+            LAST_MODIFIED_DATE     : new Date().toISOString().slice(0, 19).replace('T', ' '),
+            LAST_MODIFIED_BY       : null
 
         };
 
-        var query = connection.query("INSERT INTO QM_GEAR_1 set ? ",data, function(err, rows)
+        var query = connection.query("INSERT INTO QM_GEAR set ? ",data, function(err, rows)
         {
 
           if (err)
@@ -87,17 +89,17 @@ exports.save_edit = function(req,res){
 
     req.getConnection(function (err, connection) {
 
-        var data = {
+      var data = {
 
-            ID    : input.id,
-            NOTES : input.notes,
-            ITEM_CONDITION   : input.item_condition,
-            ITEM_STATUS   : input.item_status,
-            LAST_USER     : input.last_user
+          ID    : input.id,
+          NOTES : input.notes,
+          ITEM_STATUS   : input.item_status,
+          ITEM_RATING   : input.item_rating,
+          LAST_MODIFIED_DATE     : new Date().toISOString().slice(0, 19).replace('T', ' ')
 
-        };
+      };
 
-        connection.query("UPDATE QM_GEAR_1 set ? WHERE id = ? ",[data,id], function(err, rows)
+        connection.query("UPDATE QM_GEAR set ? WHERE id = ? ",[data,id], function(err, rows)
         {
 
           if (err)
@@ -117,7 +119,7 @@ exports.delete_gear = function(req,res){
 
      req.getConnection(function (err, connection) {
 
-        connection.query("DELETE FROM QM_GEAR_1  WHERE id = ? ",[id], function(err, rows)
+        connection.query("DELETE FROM QM_GEAR WHERE id = ? ",[id], function(err, rows)
         {
 
              if(err)
