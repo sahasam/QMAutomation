@@ -1,0 +1,51 @@
+<%- include layouts/header.ejs %>
+
+        <div class="page-data">
+         <div class="data-btn">
+           <button onClick="addUser();">+ Add</button>
+         </div>
+         <div class="table-responsive">
+            <table class="table table-condensed">
+                <tr>
+                    <th width="50px">No</th>
+                    <th>ID</th>
+                    <th>Notes</th>
+                    <th>Item Condition</th>
+                    <th>Item Status</th>
+                    <th>Last User</th>
+                    <th width="120px">Action</th>
+                </tr>
+
+                <% if(data.length){
+
+                 for(var i = 0;i < data.length;i++) { %>
+
+                <tr>
+                    <td><%=(i+1)%></td>
+                    <td><%=data[i].ID%></td>
+                    <td><%=data[i].NOTES%></td>
+                    <td><%=data[i].ITEM_CONDITION%></td>
+                    <td><%=data[i].ITEM_STATUS%></td>
+                    <td><%=data[i].LAST_USER%></td>
+                    <td>
+                        <a class="a-inside edit" href="../inventory/edit/<%=data[i].ID%>">Edit</a>
+
+                        <a class="a-inside delete" href="../inventory/delete/<%=data[i].ID%>">Delete</a>
+
+                    </td>
+                </tr>
+            <% }
+
+             }else{ %>
+                 <tr>
+                    <td colspan="3">No gear</td>
+                 </tr>
+            <% } %>
+
+
+
+            </table>
+         </div>
+        </div>
+
+<%- include layouts/footer.ejs %>
