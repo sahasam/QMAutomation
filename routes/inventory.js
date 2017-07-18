@@ -87,14 +87,18 @@ exports.save_edit = function(req,res){
     var input = JSON.parse(JSON.stringify(req.body));
     var id = req.params.id;
 
+    var status = input.input_item_status;
+
     req.getConnection(function (err, connection) {
 
+      console.log('hello from exports.save_edit');
+      console.log(input);
       var data = {
 
-          ID    : input.id,
-          NOTES : input.notes,
-          ITEM_STATUS   : input.item_status,
-          ITEM_RATING   : input.item_rating,
+          ID    : input.input_id,
+          NOTES : input.input_notes,
+          ITEM_STATUS   : status,
+          ITEM_RATING   : input.input_item_rating,
           LAST_MODIFIED_DATE     : new Date().toISOString().slice(0, 19).replace('T', ' ')
 
       };

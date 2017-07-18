@@ -1,34 +1,66 @@
 <%- include layouts/header.ejs %>
 
-        <div class="page-data">
+<div id="editGear">
+  <form method="post" action="/inventory/edit/<%=data[0].ID%>">
 
-            <form method="post" action="/inventory/edit/<%=data[0].ID%>">
-                <table cellpadding="11">
-                <tr>
-                    <td class="label">ID</td><td>: <input type="text" name="id" value="<%=data[0].ID%>" required></td>
-                 </tr>
-                 <tr>
-                    <td class="label" valign="top">Notes</td>
-                    <td valign="top">:
-                        <textarea name="notes" required cols="30" rows="5"><%=data[0].NOTES%></textarea>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">Item Status</td><td>: <input type="text" value="<%=data[0].ITEM_STATUS%>" name="item_status" required></td>
-                 </tr>
-                  <tr>
-                    <td class="label">Item Rating</td><td>: <input type="text" name="item_rating" value="<%=data[0].ITEM_RATING%>" required></td>
-                 </tr>
-                 <tr>
-                    <td>
-                        &nbsp; <input type="submit" name="submit" value="Save">
-                       <input type="button" name="cancel" value="Cancel" class="cancel" onClick="cancelAdd()">
-                    </td>
-                 </tr>
+    <!-- Form Row for ID-->
+    <div class="form-group row">
+      <label for="input_id" class="col-sm-2 col-form-label">ID</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" value="<%=data[0].ID%>" id="input_id" placeholder="<%=data[0].ID%>" required>
+      </div>
+    </div>
 
-                </table>
-            </form>
+    <!-- Form Row for NOTES-->
+    <div class="form-group row">
+      <label for="input_notes" class="col-sm-2 col-form-label">Notes</label>
+      <div class="col-sm-10">
+        <textarea name="input_notes" required cols="30" rows="5" placeholder="<%=data[0].NOTES%>"></textarea>
+      </div>
+    </div>
 
+    <!-- Form Row for ITEM_RATING -->
+    <div class="form-group row">
+      <label for="input_item_rating" class="col-sm-2 col-form-label">Item Rating</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="input_item_rating" placeholder="<%= data[0].ITEM_RATING%>">
+      </div>
+    </div>
+
+    <legend class="col-form-legend"><h3>Advanced</h3></legend>
+    <!-- Form Row for ITEM_STATUS -->
+    <fieldset class="form-group row">
+      <legend class="col-form-legend col-sm-2">Item Status</legend>
+      <div id="form_item_status" class="btn-group col-sm-10">
+        <div class="form-check">
+          <label class="form-check-label">
+            <input class="form-check-input" type="radio" name="input_item_status" id="gridRadios1" value="1" <% if(data[0].ITEM_STATUS == 1) { %> checked <%}%> >
+              In Shack
+          </label>
         </div>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input class="form-check-input" type="radio" name="input_item_status" id="gridRadios2" value="2" <% if(data[0].ITEM_STATUS == 2) { %> checked <%}%> >
+              Out of Shack
+          </label>
+        </div>
+        <div class="form-check disabled">
+          <label class="form-check-label">
+            <input class="form-check-input" type="radio" name="input_item_status" id="gridRadios3" value="3" <% if(data[0].ITEM_STATUS == 3) { %> checked <%}%> >
+              Unusable
+          </label>
+        </div>
+      </div>
+    </fieldset>
+
+
+
+    <!-- Submit Button -->
+    <input type="submit" name="submit" value="Save">
+
+    <!-- Cancel Button -->
+    <input type="button" name="cancel" value="Cancel" class="cancel" onClick="cancelAdd()">
+  </form>
+</div>
 
 <%- include layouts/footer.ejs %>
