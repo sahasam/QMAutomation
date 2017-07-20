@@ -63,6 +63,7 @@ app.post('/inventory/add', inventory.save);
 app.get('/inventory/delete/:id', inventory.delete_gear);
 app.get('/inventory/edit/:id', inventory.edit);
 app.post('/inventory/edit/:id',inventory.save_edit);
+app.post('/inventory/mgmt',inventory.mgmt);
 
 
 app.use(app.router);

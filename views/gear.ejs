@@ -3,8 +3,8 @@
 <div class="data-btn">
  <button onClick="addUser();">+ Add</button>
 </div>
-<div class="table-responsive">
-  <table class="table table-striped table-bordered table-responsive" id="inventory_list">
+<div>
+  <table class="table table-responsive table-striped table-bordered" id="inventory_list">
     <thead>
       <tr>
         <th>#</th>
@@ -42,17 +42,14 @@
         <td colspan="3">No gear</td>
      </tr>
 <% } %>
-
-</div>
-
-
-
 </table>
+</div>
 
 <script>
 $('#inventory_list').Tabledit({
   editButton: true,
   removeButton: true,
+  url: '/inventory/mgmt',
   columns: {
     identifier: [1, 'ID'],
     editable: [[2, 'Notes'],[3, 'Item Status', '{"1": "In Shack", "2": "Out of Shack", "3": "Unusable"}'],[4, 'Item Rating']]
@@ -73,7 +70,7 @@ buttons: {
     class: 'btn btn-sm btn-success',
     html: 'Save',
     method: 'post',
-    action: '/inventory/edit/<%=data[0].ID%>'
+    action: 'add'
   }
 }
 

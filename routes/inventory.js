@@ -29,6 +29,7 @@ exports.add = function(req, res){
 
 exports.edit = function(req, res){
 
+	console.log(req);
     var id = req.params.id;
 
     req.getConnection(function(err,connection){
@@ -135,3 +136,69 @@ exports.delete_gear = function(req,res){
 
      });
 };
+
+
+
+exports.mgmt = function(req, res){
+
+	var input = JSON.parse(JSON.stringify(req.body));
+    var action = req.params.action;
+    
+    if (input.action == 'edit') {
+
+	
+	    var id = input.ID;
+	    var notes = input.Notes;
+	    var status = input['Item Status'];
+	    var rating = input['Item Rating']
+	
+	    req.getConnection(function (err, connection) {
+	
+	      console.log('hello from exports.save_edit');
+	      console.log(input);
+	      var data = {
+	
+	          ID    : id,
+	          NOTES : notes,
+	          ITEM_STATUS   : status,
+	          ITEM_RATING   : rating,
+	          LAST_MODIFIED_DATE     : new Date().toISOString().slice(0, 19).replace('T', ' ')
+	
+	      };
+	
+	        connection.query("UPDATE QM_GEAR set ? WHERE id = ? ",[data,id], function(err, rows)
+	        {
+	
+	          if (err)
+	              console.log("Error Updating : %s ",err );
+	
+	          res.redirect('inventory');
+	
+	        });
+	
+	    });
+    } else if (input.action=='delete') {
+
+    	var input = JSON.parse(JSON.stringify(req.body));
+    	
+    	console.log('hello from exports.mgmt.delete');
+	      console.log(input);
+    	
+	    var id = input.ID;
+
+	    req.getConnection(function (err, connection) {
+
+        connection.query("DELETE FROM QM_GEAR WHERE id = ? ",[id], function(err, rows)
+        {
+
+             if(err)
+                 console.log("Error deleting : %s ",err );
+
+             res.redirect('inventory');
+
+        });
+
+     });
+   }
+};
+
